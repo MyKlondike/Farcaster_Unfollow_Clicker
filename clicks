@@ -1,0 +1,41 @@
+// === JS Unfollow Clicker ===
+// Automatically clicks all "Unfollow" buttons on the page.
+// Waits 1 second between clicks and 3 seconds after scrolling.
+// Stops when there are no more buttons to click.
+
+async function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function unfollowClicker() {
+  const clickDelay = 1000;  // delay between clicks (in milliseconds)
+  const scrollDelay = 3000; // delay after scrolling (in milliseconds)
+
+  while (true) {
+    // Find all buttons with the text "Unfollow" that are not disabled
+    const buttons = Array.from(document.querySelectorAll('button'))
+      .filter(btn => btn.textContent.trim() === "Unfollow" && !btn.disabled);
+
+    if (buttons.length === 0) {
+      console.log("No more 'Unfollow' buttons found. Done ✅");
+      break;
+    }
+
+    console.log(`Found ${buttons.length} buttons. Starting clicks...`);
+
+    // Click all found buttons one by one
+    for (let i = 0; i < buttons.length; i++) {
+      buttons[i].click();
+      console.log(`(${i + 1}/${buttons.length}) Clicked 'Unfollow'`);
+      await sleep(clickDelay);
+    }
+
+    // Scroll down to load more buttons
+    window.scrollBy(0, window.innerHeight);
+    console.log("Scrolling down...");
+    await sleep(scrollDelay);
+  }
+}
+
+// Start the clicker
+unfollowClicker();
